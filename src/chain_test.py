@@ -9,7 +9,6 @@ llm = ChatOpenAI(
     model_name='gpt-4',
     max_retries=1
 )
-print(f"LLM: {llm}")
 
 prompt = ChatPromptTemplate.from_messages(
     [
@@ -20,11 +19,10 @@ prompt = ChatPromptTemplate.from_messages(
 print(f"PROMPT: {prompt}")
 
 output_parser = StrOutputParser()
-print(f"OUTPUT_PARSER: {output_parser}")
 
 chain = prompt | llm | output_parser
 print(f"CHAIN: {chain}")
 
 answer = chain.invoke({"input": "Who is a good boy?"})
 print(type(answer))
-print(answer)
+print(f"ANSWER: \n{answer}")
