@@ -1,14 +1,22 @@
 import os
-from langchain_openai import ChatOpenAI
+from langchain_openai.chat_models import ChatOpenAI
 
+### INITIALIZE MODEL
 llm = ChatOpenAI(
     openai_api_key=os.environ['OPENAI_API_KEY'],
     temperature=0,
-    model_name='gpt-4',
+    model_name='gpt-3.5-turbo',
     max_retries=1
 )
-print(f"LLM: {llm}")
-      
-answer = llm.invoke("what is the difference between langchain_core.prompts.chat.ChatPromptTemplate and langchain.prompts.chat.ChatPromptTemplate?")
-print(f"ANSWER TYPE: {answer}")
-print(f"ANSWER: \n{answer}")
+
+### RUN MODEL WITH INPUT
+answer = llm.invoke(input="In one sentence, what is a dog?")
+
+print(f"ANSWER TYPE: \n{type(answer)}")
+# <class 'langchain_core.messages.ai.AIMessage'>
+
+print(f"ANSWER.CONTENT TYPE: {type(answer.content)}")
+# <class 'str'>
+
+print(f"ANSWER: \n{answer.content}")
+# "A dog is a domesticated mammal that is commonly kept as a pet and known for its loyalty and companionship to humans."
