@@ -42,6 +42,7 @@ documentRetrieverTool = create_retriever_tool(
     description="Information about Loading Ready Run. For any question about Graham Stark, use this tool."
 )
 print(f"RETRIEVER TOOL TYPE: {type(documentRetrieverTool)}")
+# <class 'langchain_core.tools.Tool'>
 
 ### SET LIST OF TOOLS
 tools = [documentRetrieverTool]
@@ -57,13 +58,21 @@ promptTemplate = ChatPromptTemplate.from_template(template=templateStr)
 ### INITIALIZE AGENT WITH LLM, TOOLS, AND PROMPT
 agent = create_openai_functions_agent(llm=llm, tools=tools, prompt=promptTemplate)
 print(f"AGENT TYPE: {type(agent)}")
+# <class 'langchain_core.runnables.base.RunnableSequence'>
 
 ### ENABLE AGENT TO EXECUTE USING TOOLS
 agentExecutor = AgentExecutor(agent=agent, tools=tools)
 print(f"AGENT EXECUTOR TYPE: {type(agentExecutor)}")
+# <class 'langchain.agents.agent.AgentExecutor'>
 
 ### RUN AGENT
 response = agentExecutor.invoke(input={"input":"In once sentence, who is Graham Stark?"})
+# > Entering new AgentExecutor chain...
+
+# Invoking: `graham_stark` with `{'query': 'Who is Graham Stark?'}`
+
 print(f"RESPONSE TYPE: {type(response)}")
+# <class 'dict'>
 
 print(f"RESPONSE: \n{response['output']}")
+# "Graham Stark is a co-founder of Loading Ready Run, a Canadian entertainment company and comedy group known for their video and web content, including Magic: The Gathering content, streams and Let's Plays, podcasts, the annual charity event "Desert Bus for Hope", and other comedy videos.""
