@@ -1,9 +1,8 @@
-from src.unit-test-generator.agent import Agent
 import os
 
 def run_agent():
 
-    agent = Agent(
+    agent = UnitTestAgent(
         open_api_key=os.environ['OPENAI_API_KEY'],
         model="gpt-4",
         temp=0,

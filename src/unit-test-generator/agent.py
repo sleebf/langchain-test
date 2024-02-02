@@ -1,10 +1,9 @@
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate, PromptTemplate, HumanMessagePromptTemplate, MessagesPlaceholder
 from langchain_core.messages import SystemMessage
-from src.unit-test-generator import read_file, write_file
 from langchain.agents import create_openai_tools_agent, AgentExecutor
 
-class Agent():
+class UnitTestAgent():
     
     def __init__(
         self,
