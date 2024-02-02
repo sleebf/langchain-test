@@ -1,4 +1,5 @@
 import os
+from src.unit_test_generator.agent import UnitTestAgent
 
 def run_agent():
 
@@ -10,6 +11,12 @@ def run_agent():
         streaming=True,
         verbose=True,
     )
+
+    code = """
+        class Test():
+            print("Howdy!")
+
+    """
 
     input_values = {"code": code}
 

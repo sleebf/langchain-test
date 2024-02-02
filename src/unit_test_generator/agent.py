@@ -2,7 +2,24 @@ from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate, PromptTemplate, HumanMessagePromptTemplate, MessagesPlaceholder
 from langchain_core.messages import SystemMessage
 from langchain.agents import create_openai_tools_agent, AgentExecutor
+from langchain.tools import tool
+import os
 
+@tool
+def read_file(file_path:str):
+    """Read file from local directory"""
+
+    with open(file_path, 'r') as f:
+            return "File contents: " + f.read()
+    
+@tool
+def write_file(file_path:str, contents:str):
+    """Write file to local directory"""
+
+    with open(file_path, 'w') as f:
+        f.write(contents)
+        return "File '" + str(file_path) + "' saved."
+    
 class UnitTestAgent():
     
     def __init__(
@@ -13,8 +30,6 @@ class UnitTestAgent():
         max_retries:int,
         streaming:bool,
         verbose:bool,
-        human_message:str,
-        input_variables:list,
     ) -> None:
         
         llm = ChatOpenAI( 
@@ -54,7 +69,7 @@ class UnitTestAgent():
                 ]
             )
         
-        tools = []
+        tools = [read_file, write_file]
         
         file_agent = create_openai_tools_agent(llm=llm, tools=tools, prompt=chat_prompt_template)
 
@@ -67,3 +82,28 @@ class UnitTestAgent():
         self.file_agent_executor.invoke(input_values)
 
         print("RUN COMPLETE")
+
+def run_agent():
+
+    agent = UnitTestAgent(
+        open_api_key=os.environ['OPENAI_API_KEY'],
+        model="gpt-4",
+        temp=0,
+        max_retries=1,
+        streaming=True,
+        verbose=True,
+    )
+
+    code = """
+        class Test():
+            print("Howdy!")
+
+    """
+
+    input_values = {"code": code}
+
+    agent.run_agent_executor(input_values=input_values)
+
+if __name__ == "__main__":
+    
+    run_agent()
