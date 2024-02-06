@@ -2,44 +2,24 @@ from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate, PromptTemplate, HumanMessagePromptTemplate, MessagesPlaceholder
 from langchain_core.messages import SystemMessage
 from langchain.agents import create_openai_tools_agent, AgentExecutor
-from langchain.tools import tool
-import os
-
-@tool
-def read_file(file_path:str):
-    """Read file from local directory"""
-
-    with open(file_path, 'r') as f:
-            return "File contents: " + f.read()
-    
-@tool
-def write_file(file_path:str, contents:str):
-    """Write file to local directory"""
-
-    with open(file_path, 'w') as f:
-        f.write(contents)
-        return "File '" + str(file_path) + "' saved."
+from src.unit_test_generator.agent_tools import read_file, write_file
     
 class UnitTestAgent():
     
-    def __init__(
-        self,
-        open_api_key:str,
-        model:str,
-        temp:float,
-        max_retries:int,
-        streaming:bool,
-        verbose:bool,
-    ) -> None:
+    def __init__(self,
+                openai_api_key:str,
+                model:str,
+                temperpature:float,
+                max_retries:int,
+                streaming:bool,
+                verbose:bool) -> None:
         
-        llm = ChatOpenAI( 
-            openai_api_key =open_api_key,
-            model_name     =model,
-            temperature    =temp,
-            max_retries    =max_retries,
-            streaming      =streaming,
-            verbose        =verbose
-        )
+        llm = ChatOpenAI(openai_api_key=openai_api_key,
+                        model_name=model,
+                        temperature=temperpature,
+                        max_retries=max_retries,
+                        streaming=streaming,
+                        verbose=verbose)
 
         human_message = """
             Based on the following code create a python test class.
@@ -82,28 +62,3 @@ class UnitTestAgent():
         self.file_agent_executor.invoke(input_values)
 
         print("RUN COMPLETE")
-
-def run_agent():
-
-    agent = UnitTestAgent(
-        open_api_key=os.environ['OPENAI_API_KEY'],
-        model="gpt-4",
-        temp=0,
-        max_retries=1,
-        streaming=True,
-        verbose=True,
-    )
-
-    code = """
-        class Test():
-            print("Howdy!")
-
-    """
-
-    input_values = {"code": code}
-
-    agent.run_agent_executor(input_values=input_values)
-
-if __name__ == "__main__":
-    
-    run_agent()

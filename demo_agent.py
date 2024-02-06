@@ -4,9 +4,9 @@ from src.unit_test_generator.agent import UnitTestAgent
 def run_agent():
 
     agent = UnitTestAgent(
-        open_api_key=os.environ['OPENAI_API_KEY'],
+        openai_api_key=os.environ['OPENAI_API_KEY'],
         model="gpt-4",
-        temp=0,
+        temperpature=0,
         max_retries=1,
         streaming=True,
         verbose=True,
